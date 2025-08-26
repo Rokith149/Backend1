@@ -49,7 +49,8 @@ app.get('/getStudentByRollno', async (req,res)=>{
 });
 
 app.get('/paramscheck/:rollno', async (req,res)=>{
-    try{
+    try{ 
+        console.log("n")
         const {rollno} = req.params;
         const data =await Student.findOne({rollno});
         if(data){
@@ -91,5 +92,17 @@ app.delete('/deleteStudent', async(req,res)=>{
         res.send("Error in deleting")
     }
 })
-
+app.put('/updatedStudent', async (req,res)=>{
+    const {rollno,name,age,department} = req.body;
+    try{
+        const updatedStudent = await Student.findOneAndUpdate({rollno},{name,age,department},{new:true})
+        if(updatedStudent){
+            req.send("Student updated")
+        }else{
+            res.status(404).send("Student not found")
+        }
+    }catch(error){
+        res.status(500).send("Error Updating")
+    }
+})
 app.listen(4000)
